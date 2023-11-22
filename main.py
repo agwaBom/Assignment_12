@@ -2,7 +2,12 @@ from typing import List
 
 def path_to_file_list(path: str) -> List[str]:
     """Reads a file and returns a list of lines in the file"""
-    li = open(path, 'w')
+
+    """
+    'li' is a target to be returned, but the name is different from the return variable. So, the name should be the same.
+    And, it set the mode to 'w' when a file is opened, which is write mode. It must changed to read mode('r').
+    """
+    lines = open(path, 'r') # changed
     return lines
 
 def train_file_list_to_json(english_file_list: List[str], german_file_list: List[str]) -> List[str]:
@@ -17,7 +22,10 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
         return file
 
     # Template for json file
-    template_start = '{\"German\":\"'
+    """
+    have to start with a 'English'
+    """
+    template_start = '{\"English\":\"' # changed
     template_mid = '\",\"German\":\"'
     template_end = '\"}'
 
@@ -25,15 +33,25 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
     processed_file_list = []
     for english_file, german_file in zip(english_file_list, german_file_list):
         english_file = process_file(english_file)
-        english_file = process_file(german_file)
+        """
+        Since the variable name overlaps with 'english_file', change it to 'german_file'.
+        """
+        german_file = process_file(german_file) # changed
 
-        processed_file_list.append(template_mid + english_file + template_start + german_file + template_start)
+        """
+        Since the order of the templates is different, change it to the correct order.
+        """
+        processed_file_list.append(template_start + english_file + template_mid + german_file + template_end) # changed
     return processed_file_list
 
 
 def write_file_list(file_list: List[str], path: str) -> None:
     """Writes a list of strings to a file, each string on a new line"""
-    with open(path, 'r') as f:
+
+    """
+    When writing a file, it should be set to write mode, but since it is read mode, it is changed.
+    """
+    with open(path, 'w') as f: # changed
         for file in file_list:
             f.write('\n')
             
@@ -43,8 +61,14 @@ if __name__ == "__main__":
     english_path = './english.txt'
 
     english_file_list = path_to_file_list(english_path)
-    german_file_list = train_file_list_to_json(german_path)
 
-    processed_file_list = path_to_file_list(english_file_list, german_file_list)
+    """
+    'path_to_file_list' function converts a file path into a file list and has one parameter.
+    'train_file_list_to_json' functio converts a file list into a json file format and has two file parameters.
+    However, since the function of the code below was not used properly, it is corrected appropriately.
+    """
+    german_file_list = path_to_file_list(german_path) # changed
+
+    processed_file_list = train_file_list_to_json(english_file_list, german_file_list) # changed
 
     write_file_list(processed_file_list, path+'concated.json')
