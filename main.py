@@ -27,7 +27,7 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
         english_file = process_file(english_file)
         german_file = process_file(german_file)
 
-        processed_file_list.append(template_start + english_file + template_mid + german_file + template_end)
+        processed_file_list.append(template_start + english_file[:-1] + template_mid + german_file[:-1] + template_end)
     return processed_file_list
 
 
@@ -36,6 +36,7 @@ def write_file_list(file_list: List[str], path: str) -> None:
     with open(path, 'w') as f:
         for file in file_list:
             f.write(file)
+            f.write('\n')
             
 if __name__ == "__main__":
     path = './'
