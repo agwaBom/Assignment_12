@@ -27,6 +27,9 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
         english_file = process_file(english_file)
         german_file = process_file(german_file)
 
+        if (english_file == "" and german_file == ""):
+            continue
+
         processed_file_list.append(template_start + english_file + template_mid + german_file + template_end)
     return processed_file_list
 
