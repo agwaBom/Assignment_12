@@ -34,8 +34,8 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
 
 
 def write_file_list(file_list: List[str], path: str) -> None:
-    # Correction : mode to write, and f to file
     """Writes a list of strings to a file, each string on a new line"""
+     # Correction : mode to write, and f to file
     with open(path, 'w') as f:
         for file in file_list:
             f.write(file +'\n')
