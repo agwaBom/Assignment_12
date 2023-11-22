@@ -30,7 +30,7 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
         german_file = process_file(german_file)
 
         processed_file_list.append(
-            template_mid + english_file + template_start + german_file + template_start)
+            template_start + english_file + template_mid + german_file + template_end)
     return processed_file_list
 
 
