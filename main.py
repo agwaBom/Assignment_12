@@ -19,7 +19,7 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
     # Template for json file
     template_start = '{\"English\":\"'
     template_mid = '\",\"German\":\"'
-    template_end = '\"}'
+    template_end = '\"}' 
 
     # Can this be working?
     processed_file_list = []
