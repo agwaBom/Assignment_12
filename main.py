@@ -2,7 +2,7 @@ from typing import List
 
 def path_to_file_list(path: str) -> List[str]:
     """Reads a file and returns a list of lines in the file"""
-    lines = open(path, 'r').read().split('\n')
+    lines = open(path, 'r').read().split("\n")
     return lines
 
 def train_file_list_to_json(english_file_list: List[str], german_file_list: List[str]) -> List[str]:
@@ -10,14 +10,14 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
     # Preprocess unwanted characters
     def process_file(file):
         if '\\' in file:
-            file = file.replace('\\', '\\')
+            file = file.replace('\\', '\\\\')
         if '/' or '"' in file:
             file = file.replace('/', '\\/')
             file = file.replace('"', '\\"')
         return file
 
     # Template for json file
-    template_start = '{\"German\":\"'
+    template_start = '{\"English\":\"'
     template_mid = '\",\"German\":\"'
     template_end = '\"}'
 
@@ -43,8 +43,8 @@ if __name__ == "__main__":
     english_path = './english.txt'
 
     english_file_list = path_to_file_list(english_path)
-    german_file_list = train_file_list_to_json(german_path)
+    german_file_list = path_to_file_list(german_path)
 
-    processed_file_list = path_to_file_list(english_file_list, german_file_list)
+    processed_file_list = train_file_list_to_json(english_file_list, german_file_list)
 
     write_file_list(processed_file_list, path+'concated.json')
