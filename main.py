@@ -2,6 +2,7 @@ from typing import List
 
 def path_to_file_list(path: str) -> List[str]:
     """Reads a file and returns a list of lines in the file"""
+    # change to read the file
     lines = open(path, 'r').read().split('\n')
     return lines
 
@@ -22,6 +23,7 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
     template_end = '\"}'
 
     # Can this be working?
+    # Change the order
     processed_file_list = []
     for english_file, german_file in zip(english_file_list, german_file_list):
         english_file = process_file(english_file)
@@ -35,6 +37,7 @@ def write_file_list(file_list: List[str], path: str) -> None:
     """Writes a list of strings to a file, each string on a new line"""
     with open(path, 'w') as f:
         for file in file_list:
+            # modify so that it can write the things
             f.write(file + '\n')
             
 if __name__ == "__main__":
