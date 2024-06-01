@@ -2,7 +2,8 @@ from typing import List
 
 def path_to_file_list(path: str) -> List[str]:
     """Reads a file and returns a list of lines in the file"""
-    li = open(path, 'w')
+    lines = open(path, 'r').read().split('\n')  #w 대신 r로 파일을 열고, 각 line을 element로 갖는 list 만들기
+
     return lines
 
 def train_file_list_to_json(english_file_list: List[str], german_file_list: List[str]) -> List[str]:
@@ -10,7 +11,7 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
     # Preprocess unwanted characters
     def process_file(file):
         if '\\' in file:
-            file = file.replace('\\', '\\')
+            file = file.replace('\\', '\\\\') #\\를 \\\\로 바꿈
         if '/' or '"' in file:
             file = file.replace('/', '\\/')
             file = file.replace('"', '\\"')
@@ -33,9 +34,9 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
 
 def write_file_list(file_list: List[str], path: str) -> None:
     """Writes a list of strings to a file, each string on a new line"""
-    with open(path, 'r') as f:
+    with open(path, 'w') as f:  #r을 w로 바꾸기
         for file in file_list:
-            f.write('\n')
+            f.write(file + '\n') #\n만 하던거를 file + '\n' 하게 만들기
             
 if __name__ == "__main__":
     path = './'
