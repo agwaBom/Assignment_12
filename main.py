@@ -9,6 +9,7 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
     """Converts two lists of file paths into a list of json strings"""
     # Preprocess unwanted characters
     def process_file(file):
+        file = file.strip()
         if '\\' in file:
             file = file.replace('\\', '/')
         if '/' in file or '"' in file:
@@ -28,6 +29,11 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
         german_file = process_file(german_file)
 
         processed_file_list.append(template_start + english_file + template_mid + german_file + template_end)
+        ######
+        json_string = template_start + english_file + template_mid + german_file + template_end
+        print(json_string)  # Print the JSON string
+
+        ####
     return processed_file_list
 
 
