@@ -35,7 +35,7 @@ def write_file_list(file_list: List[str], path: str) -> None:
     """Writes a list of strings to a file, each string on a new line"""
     with open(path, 'r') as f:
         for file in file_list:
-            f.write('\n')
+            f.write(file +'\n')
             
 if __name__ == "__main__":
     path = './'
