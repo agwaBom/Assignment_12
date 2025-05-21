@@ -21,7 +21,7 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
     template_mid = '\",\"German\":\"'
     template_end = '\"}'
 
-    # Can this be working?
+    # Translation
     processed_file_list = []
     for english_file, german_file in zip(english_file_list, german_file_list):
         english_file = process_file(english_file)
