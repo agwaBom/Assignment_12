@@ -1,50 +1,41 @@
-from typing import List
 
-def path_to_file_list(path: str) -> List[str]:
-    """Reads a file and returns a list of lines in the file"""
-    li = open(path, 'w')
-    return lines
+import json
+import sys
+from pathlib import Path
 
-def train_file_list_to_json(english_file_list: List[str], german_file_list: List[str]) -> List[str]:
-    """Converts two lists of file paths into a list of json strings"""
-    # Preprocess unwanted characters
-    def process_file(file):
-        if '\\' in file:
-            file = file.replace('\\', '\\')
-        if '/' or '"' in file:
-            file = file.replace('/', '\\/')
-            file = file.replace('"', '\\"')
-        return file
+def paragraphs_from_file(path):
+    text = path.read_text(encoding="utf-8")
+    lines = text.splitlines()
+    paragraphs = []
+    cur = []
+    for ln in lines:
+        if ln.strip() == "":
+            if cur:
+                paragraphs.append(" ".join([l.rstrip() for l in cur]).strip())
+                cur = []
+        else:
+            cur.append(ln)
+    if cur:
+        paragraphs.append(" ".join([l.rstrip() for l in cur]).strip())
+    paragraphs = [p for p in paragraphs if p]
+    return paragraphs
 
-    # Template for json file
-    template_start = '{\"German\":\"'
-    template_mid = '\",\"German\":\"'
-    template_end = '\"}'
+def main():
+    base = Path(".")
+    eng_file = base / "english.txt"
+    ger_file = base / "german.txt"
 
-    # Can this be working?
-    processed_file_list = []
-    for english_file, german_file in zip(english_file_list, german_file_list):
-        english_file = process_file(english_file)
-        english_file = process_file(german_file)
+    if not eng_file.exists() or not ger_file.exists():
+        print("Required files english.txt and german.txt not found in current directory.", file=sys.stderr)
+        sys.exit(1)
 
-        processed_file_list.append(template_mid + english_file + template_start + german_file + template_start)
-    return processed_file_list
+    english_pars = paragraphs_from_file(eng_file)
+    german_pars = paragraphs_from_file(ger_file)
 
+    pair_count = min(len(english_pars), len(german_pars))
+    for i in range(pair_count):
+        obj = {"English": english_pars[i], "German": german_pars[i]}
+        print(json.dumps(obj, ensure_ascii=False, separators=(",", ":")))
 
-def write_file_list(file_list: List[str], path: str) -> None:
-    """Writes a list of strings to a file, each string on a new line"""
-    with open(path, 'r') as f:
-        for file in file_list:
-            f.write('\n')
-            
 if __name__ == "__main__":
-    path = './'
-    german_path = './german.txt'
-    english_path = './english.txt'
-
-    english_file_list = path_to_file_list(english_path)
-    german_file_list = train_file_list_to_json(german_path)
-
-    processed_file_list = path_to_file_list(english_file_list, german_file_list)
-
-    write_file_list(processed_file_list, path+'concated.json')
+    main()
