@@ -1,50 +1,47 @@
 from typing import List
 
 def path_to_file_list(path: str) -> List[str]:
-    """Reads a file and returns a list of lines in the file"""
-    li = open(path, 'w')
+    """Reads a file and returns a list of lines in the file (skipping empty lines)"""
+    with open(path, 'r') as f:
+        lines = [line.strip() for line in f if line.strip()]
     return lines
 
+
 def train_file_list_to_json(english_file_list: List[str], german_file_list: List[str]) -> List[str]:
-    """Converts two lists of file paths into a list of json strings"""
-    # Preprocess unwanted characters
-    def process_file(file):
-        if '\\' in file:
-            file = file.replace('\\', '\\')
-        if '/' or '"' in file:
-            file = file.replace('/', '\\/')
-            file = file.replace('"', '\\"')
-        return file
+    """Converts English and German lines into a list of JSON strings."""
 
-    # Template for json file
-    template_start = '{\"German\":\"'
-    template_mid = '\",\"German\":\"'
-    template_end = '\"}'
+    # escape characters
+    def process(text):
+        text = text.replace('\\', '\\\\')
+        text = text.replace('/', '\\/')
+        text = text.replace('"', '\\"')
+        return text
 
-    # Can this be working?
-    processed_file_list = []
-    for english_file, german_file in zip(english_file_list, german_file_list):
-        english_file = process_file(english_file)
-        english_file = process_file(german_file)
+    template_start = '{"English":"'
+    template_mid = '","German":"'
+    template_end = '"}'
 
-        processed_file_list.append(template_mid + english_file + template_start + german_file + template_start)
-    return processed_file_list
+    result = []
+    for eng, ger in zip(english_file_list, german_file_list):
+        eng = process(eng)
+        ger = process(ger)
+        result.append(template_start + eng + template_mid + ger + template_end)
+
+    return result
 
 
 def write_file_list(file_list: List[str], path: str) -> None:
-    """Writes a list of strings to a file, each string on a new line"""
-    with open(path, 'r') as f:
-        for file in file_list:
-            f.write('\n')
-            
+    """Writes each JSON item on a new line."""
+    with open(path, 'w') as f:
+        for line in file_list:
+            f.write(line + "\n")
+
+
 if __name__ == "__main__":
     path = './'
-    german_path = './german.txt'
-    english_path = './english.txt'
 
-    english_file_list = path_to_file_list(english_path)
-    german_file_list = train_file_list_to_json(german_path)
+    english_file_list = path_to_file_list(path + 'english.txt')
+    german_file_list = path_to_file_list(path + 'german.txt')
 
-    processed_file_list = path_to_file_list(english_file_list, german_file_list)
-
-    write_file_list(processed_file_list, path+'concated.json')
+    json_list = train_file_list_to_json(english_file_list, german_file_list)
+    write_file_list(json_list, path + 'concated.json')
