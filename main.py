@@ -2,10 +2,8 @@ from typing import List
 
 def path_to_file_list(path: str) -> List[str]:
     """Reads a file and returns a list of lines in the file"""
-    with open(path, 'r') as f:
-        lines = f.readlines()
-    return lines
-
+    li = open(path, 'r')
+    return li
 def train_file_list_to_json(english_file_list: List[str], german_file_list: List[str]) -> List[str]:
     """Converts two lists of file paths into a list of json strings"""
     # Preprocess unwanted characters
@@ -36,7 +34,7 @@ def write_file_list(file_list: List[str], path: str) -> None:
     """Writes a list of strings to a file, each string on a new line"""
     with open(path, 'w') as f:
         for file in file_list:
-            f.write(file + '\n')
+            f.write('\n')
             
 if __name__ == "__main__":
     path = './'
